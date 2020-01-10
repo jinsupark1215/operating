@@ -1,0 +1,47 @@
+프로세스(Process)
+프로세스의 문맥(context)
+ CPU 수행 상태를 나타내는 하드웨어 문맥(Program Counter, 각종 register) 프로세스의 주소 공간(code, data, stack)
+프로세스 관련 커널 자료 구조(PCB, Kernel stack)
+
+프로세스는 상태(state)
+Running : CPU를 잡고 instruction을 수행중인 상태
+
+Ready : CPU를 기다리는 상태(메모리 등 다른 조건을 모두 만족)
+
+Blocked(wait, sleep) : CPU를 주어도 당장 instruction을 수행할 수 없는 상태, Process 가 준 요청을 바로 처리할 수 없는 상황
+본격적인 process 상태가 아님 - New : 생성중, Terminated : 종료중
+
+Suspended(stopped) : 외부적인 이유로 프로세스의 수행이 정지된 상태, 프로세스는 통째로 디스크에 swap out, 중기 스케줄러에 의해서
+
+
+PCB(Process Control Block)
+운영체제가 각 프로세스를 관리하기 위해 프로세스당 유지하는 정보
+구조체 유지
+OS가 관리상 사용하는 정보 - Process state
+
+문맥 교환 (Context Switch)
+CPU를 한 프로세스에서 다른 프로세스로 넘겨주는 과정
+CPU가 다른 프로세스에서 넘어갈 때 내어주는 프로세스의 상태를 그 프로세스의 PCB에 저장하고 새롭게 얻은 프로세스의 PCB를 읽어옴.
+
+(예 : 프로그램 A에서 프로그램 B로 CPU 이동되는 경우 문맥교환에 해당. timer Interrupt나 I/O요청 system call이 일어나는 경우)
+* system call이나 Interrupt 발생은 문맥교환이 일어난 것이 아님.
+(사용자프로그램 A -> 사용자 프로그램 A)
+
+스케줄러(Scheduler)
+Long-term scheduler(장기 스케줄러 or job scheduler)
+memory를 주는 문제,시작 프로세스 중 어떤 것을 ready queue로 보낼지 결정
+Short-term scheduler (단기 스케줄러 or CPU scheduler)
+프로세스에 CPU를 주는 문제, 어떤 프로세스를 running 할 지 결정,충분히 빨라야함
+Medium-Term Scheduler (중기 스케줄러)
+degree of Multiprogramming을 제어(메모리에 몇개의 프로그램이 올라와있는가), 여유 공간 마련을 위해 프로세스를 통째로 메모리에서 디스크로 쫓아냄
+
+Thread
+Process > Thread.
+ Program Counter,Register set, stack space만 다름 . 
+다른 code section, data section, OS resources 부분은 공유(=task)
+장점 : 하나의 스레드가 blocked 상태인 동안에 다른 스레드가 실행되어 빠른 처리가능
+동일한 일을 수행하는 다중 스레드가 협력해 높은 처리율과 성능 향상 가능
+병렬성 높임.
+장점 : 반응성(Responsiveness), 자원 공유(Resource Sharing), 경제적(Economy) : 프로세스를 여러개만드는 것보다 스레드를 만드는 것이 30배차이, 멀티프로세스에서의 효과(Utilization of MP Architectures) : 병렬성
+운영체제가 아는 쓰레드(Kernel Threads) : 커널에서 지원해주는 쓰레드, 운영체제가 모르는 쓰레드(User Threads): 프로세스 내부에서 처리
+
