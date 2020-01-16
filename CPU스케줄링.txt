@@ -1,0 +1,58 @@
+CPU 스케줄링
+
+프로세스의 특성 분류
+CPU bound job(=process) - CPU를 길게 쓰는 프로세스
+I/O bound job - CPU와 I/O를 효율적 사용, 사람과 가까움
+
+CPU Scheduler : Ready 상태의 프로세스 중 CPU를 누구에게 줄지 고름
+Dispatcher : 제어권을 선택된 프로세스에게 넘긴다 (=문맥교환)
+*CPU 상태변화 : 
+Running -> Blocked(I/O 요청하는 시스템콜)
+Running -> Ready (할당시간만료로 time interrupt)
+Blocked -> Ready ( I/O완료 후 인터럽트
+Terminate 종료
+1,4는 nonpreemptive(=자진반납) 2,3은 preemptive(=강제로 빼앗음)
+
+Scheduling Criteria(성능 척도)
+CPU utilization(이용률)
+Throughput(처리량)
+Turnaround time(소요시간 - cpu 사용 시간과 기다린시간), Waiting time(대기시간 - 기다린 시간의 합), Response time(응답시간 - 최초로 cpu 사용하기 까지의 시간)
+
+Scheduling Algorithm
+	
+FCFS(First-Come First-Served) : 먼저오는 순서대로 처리 - nonpreemptive
+SJF(Shortest-job-First) : 가장 짧은 프로세스를 제일 먼저 스케줄, waiting time이 제일 짧음.
+- nonpreemptive : CPU를 잡으면 완료할 때까지 선점 X
+- Preemptive : 수행중인 프로세스의 남은 time보다 더 짧은 프로세스가 도착하면 CPU를 빼앗음 SRTF라고도 함 -> optimal한 방법
+*약점 : starvation 발생(긴 프로세스는 CPU를 잡지 못할 수 있음),  cpu burst time은 추정을 통해 시간을 구함(과거의 cpu burst time 기준)
+Priority Scheduling : 우선순위를 주어 CPU 할당
+nonpreemptive, preemptive 둘다 사용가능, SJF는 우선순위 스케줄링이다.
+* 약점 : starvation 발생 / 해결책 : Aging 기다리는만큼 우선순위 증가
+Round Robin : 각 프로세스의 할당시간을 줌. preemptive한 방법, Response time이 제일 짧음. 
+*짧은 job 긴 job이 섞여 있을 때 효율적
+Multilevel Queue : Ready queue를 여러개로 분할. foreground(interactive) -  RR, background(batch-no human interaction) - FCFS. 각 큐는 독립적인 스케줄링 알고리즘
+Multilevel Feedback Queue : queue마다의 우선순위를 줌, 
+*정의하는 파라미터 - queue의 수, 각 큐의 우선순위, 상위큐로 보내거나 하위큐로 보내는 기준
+
+
+
+
+Multiple-Processor Scheduling : CPU가 여러개 있는 경우. 
+-Homogeneous processor : queue에 한줄로 넣어 CPU가 꺼내가는 방법(한줄서기)
+Load sharing : 일부 프로세서에 job이 몰리지 않도록 부하를 적절히 공유 (별개의 큐를 두는 경우 vs 공동 큐를 사용하는 방법)
+-Symmetric Multiprocessing(SMP) : 각 프로세서가 각자 알아서 스케줄링
+-Asymmetric multiprocessing : 하나의 CPU가 대장이 되어 결정.
+
+Real-Time Scheduling 
+-Hard real-time systems : 정해진 시간안에 반드시 끝내도록 스케줄링
+-Soft real-time computing : 일반 프로세스에 비해 높은 우선순위
+
+
+Thread Scheduling
+Local Scheduling : user level thread의 경우 프로세스 내부에서 스케줄링
+Global Scheduling : Kernel level thread로 스케줄링
+
+Algorithm Evaluation(좋은 알고리즘 찾는 방법)
+Queueing models : 주어지는 도착시간과 서비스 시간을 통해 계산
+Implementation(구현) & Measurement(성능측정) : 실제 작업 성능 측정 및 비교
+Simulation(모의 실험) : 모의 프로그램 작성 후 trace를 통해 결과 비교
