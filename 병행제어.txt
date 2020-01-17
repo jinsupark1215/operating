@@ -1,0 +1,36 @@
+병행 제어
+
+Race Condition (데이터를 동시에 접근했을 때 생기는 문제)
+프로세스 내부에서는 문제가 생길 일이 없음
+시스템 콜 중 운영체제의 내부 데이터(Kernel data)에 접근하는 경우 Race Condition 발생 
+-> 해결책 : 커널 모드에서 수행중일 때는 CPU를 preempt(강제로 뺏기) 하지 않음. 커널모드에서 사용자 모드로 돌아갈 때 preempt
+interrupt가 발생하여 인터럽트 처리루틴이 수행되는 경우
+-> 해결책 : 양쪽 다 커널 코드이므로 kerel address space 공유
+CPU가 여러개인 경우
+-> 해결책 : 한번에 하나의 CPU만 커널에 들어가는방법(CPU에 lock/unlock), 데이터별로 lock/unlock
+
+Process Synchronization 문제
+공유 데이터의 동시 접근으로 인해 데이터 불일치 문제 발생
+일관성 유지를 위해 프로세스 간의 실행 순서를 정해주는 메커니즘
+Problem : 하나의 프로세스가 critical section에 있을 때 다른 프로세스가 접근하지 못하게 함. (lock을 걸어버리는 것) -> 프로세스 동기화 하는 행위
+프로그램적 해결법의 충족 조건
+Mutual Exclusion(상호 배제) : 동시성
+Progress(진행) : 아무도 없다면 들어갈 수 있도록 해줘야한다
+Bounded Waiting(유한 대기) : 3개 중 2개만 돌아가고 1개는 돌아가지 않는 상황
+	
+	// 소프트웨어적 해결
+해결 Algorithm 1 : 임의의 변수 int turn을 두어 끝날 때 상대방 turn으로 번갈아 CPU 들어감 ->문제점 : 동시성 해결,but 진행 X.
+해결 Algorithm 2 : boolean flag를 두어 CPU 이동 -> 동시성 해결,but 서로 양보해 진행 X
+해결 Algorithm 3 : flag와 turn을 만들어 flag로 체크하고 turn으로 순서-> spin lock 문제가 생길수도 있음(무한루프비슷한)
+
+// 하드웨어적 해결
+해결 Synchronization Hardware : Test_and_set을 atomic하게 수행하도록 한다. (하드웨어적으로 lock을 걸고 빠져나올 때 unlock으로)
+
+	// 추상화적 해결
+Semaphores : 위의 방식을 추상화시킴, Integer형. S: 여분의 갯수
+P(S) : 자원 획득 과정(lock 거는 과정), V(S) : 자원 반환 과정(lock 푸는 과정)
+Block / Wakeup Implementation : Semaphore를 구조체 형식으로 만듦.리스트 방식, 양수일 경우 진행 가능상태, 음수일 경우 진행 불가 
+block : 진행중이 아닌것들을 리스트에 넣어줌
+wakeup : 리스트에 있는 걸 진행중으로 올림
+
+*Busy-wait vs Block/wakeup : 길이가 긴 경우는 block/wakeup이 적당. 길이 짧은 경우에는 block/wakeup이 오버헤드가 더 커질 수도 있음. 보통 Block/wakeup 방식이 더 좋음
