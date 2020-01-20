@@ -34,3 +34,32 @@ block : 진행중이 아닌것들을 리스트에 넣어줌
 wakeup : 리스트에 있는 걸 진행중으로 올림
 
 *Busy-wait vs Block/wakeup : 길이가 긴 경우는 block/wakeup이 적당. 길이 짧은 경우에는 block/wakeup이 오버헤드가 더 커질 수도 있음. 보통 Block/wakeup 방식이 더 좋음
+
+
+Deadlock and Starvation
+Deadlock : 둘 이상의 프로세스가 서로 상대방에 충족되어 event를 무한히 기다림
+starvation : 각각의 입장에서는 starvation
+*해결책 : 프로세스에 얻는 순서를 정해주면 해결
+
+Synchronization 문제
+Bounded-Buffer Problem : 공유 Buffer에 동시에 들어가는 문제가 발생하는 경우. 
+*해결책 : 공유 Buffer에 Producer 가 lock을 걸고 들어감 나올 때 unlock.
+Producer : 빈버퍼가 있는지 판단하고 생길 때까지 기다림
+	Consumer : 내용이 들어가 있는 Buffer를 체크해서 처리
+
+
+Readers-Writers Problem: 한 프로세스가 DB에 write 중에는 다른 process가 접근하면 안됨. read는 동시에 여럿이 해도됨.
+*해결책 : Writer 경우 대기중인 Reader가 없을때 DB 접근허용, Writer가 DB 빠져나가면 Reader 접근 허용
+*starvation 발생 가능 : reader가 엄청 많이 들어오는 경우, writer가 계속기다려야함
+->일정 시간간격을 두어 같이 도착한 경우에만 동시접근 허용 후 writer 사용
+
+Dining-Philosophers Problem : Deadlock 가능성
+
+Monitor(Synchronization 문제 해결)
+Semaphore의 문제점 : 코딩 어려움, 정확성 입증 어려움, 자발적 협력 필요, 한번의 실수가 모든 시스템에 영향
+동시 수행중인 프로세스 사이에서 안전한 공유를 보장(공유데이터 진입제어)
+모니터 내에서는 한번에 하나씩만 접근 가능
+프로그래머가 명시적으로 코딩할 필요 없음
+프로세스가 모니터 안에서 기다릴 수 있도록 conditions 변수를 두어 순서체크
+
+
