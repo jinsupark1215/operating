@@ -1,0 +1,28 @@
+Deadlock
+일련의 프로세스들이 서로가 가진 자원을 기다리며 block된 상태
+Resource(자원) : 하드웨어, 소프트웨어 등을 포함한 개념
+
+Deadlock 발생의 4가지 조건(모두 만족해야 생김)
+-Mutual exclusion(상호 배제) : 매 순간 하나의 프로세스만이 자원을 사용할 수 있음
+-No preemption(강제로 뺏기 불가) :  프로세스는 자원을 스스로 내어놓을 뿐 강제로 뺴앗기지 않음
+-Hold and wait(보유 대기) : 자원을 가진 프로세스가 다른 자원을 기다릴 때 보유 자원을 놓지않고 계속 가지고 있음
+-Circular wait(순환대기) : 자원을 기다리는 프로세스 간의 사이클이 형성되어야 함
+*cycle이 없으면 deadlock이 아님, cycle이 있으면 deadlock이거나 아니거나
+
+Deadlock의 처리 방법
+
+-Deadlock Prevention(예방) : 4가지 조건 중 어느 하나가 만족하지 않도록 방지
+Mutual Exclusion : 공유 안되는 자원의 경우 반드시 성립
+Hold and Wait : 자원 요청 시 다른 자원을 가지고 있지 않아야함
+No Preemption : 뺴앗길 수 있도록함.(항상 쓸 수 있는 방법은아님)
+Circular wait : 자원 할당(획득) 순서를 정한다.
+*사용성 저하, throughput 감소, starvation 문제
+
+-Deadlock Avoidance(예방) : 자원 요청에 대한 부가정보 이용,cycle이 생성될지 판단하는 조사, 
+*자원이 여러개일 때 : Banker’s Algorithm 사용.->테이블을 만들어 가용자원을 줄 수 있지만 주지 않음 (보수, 방어적인 방법)
+
+-Deadlock Detection and recovery(처리) : 
+Detection : 여유 자원이 있을 때 모두 줌(낙관,개방)
+Recovery : Process termination - 프로세스 종료, Resource Preemption - 비용을 최소화 할 victim 선정(자원 뺏기)
+
+-Deadlock Ignorance(처리) : Deadlock이 일어나지 않는다 생각하고 아무런 조치도 취하지 않음. 데드락은 매우 드물게 발생하므로 조치 자체가 overhead일 수 있음. 데드락 발생 시 사람이 직접 프로세스를 종료. 대부분의 UNIX, Windows 등 에서 사용.
