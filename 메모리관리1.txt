@@ -49,6 +49,10 @@ Dynamic Storage-Allocation Problem : 가변분할 방식에서 size를 요청해
 First-fit : Size가 n 이상인 것 중 최초로 찾아지는 hole에 할당
 Best-fit : Size가 n 이상인 가장 작은 hole을 찾아서 할당
 Worst-fit : 가장 큰 hole에 할당
-compaction : 사용중인 메모리 영역을 한군데로 몰고 hole을 합치는 것, 비용 많이듬
+compaction : 사용중인 메모리 영역을 한군데로 몰고 hole을 합치는 것, 비용이 많이듬
 
 Noncontiguous allocation(비연속 할당) : 하나의 프로세스가 메모리의 여러 영역에 분산되어 올라감
+-Paging : 동일한 사이즈의 page로 나눠서 물리적 메모리에 저장, 논리적메모리를 페이지로 나누고 물리적메모리는 frame으로 나눔
+Implementation of Page Table : main memory에 상주, (TLB)-주소변환을 빠르게 변환시키기 위한 캐시메모리
+Two-level Page Table(TLB) - 테이블주소변환, 32bit, 4Kpage size 구성
+Multilevel Paging : 4단계 페이징 테이블을 사용하는 경우 오래걸림.
