@@ -1,0 +1,10 @@
+Demand Paging : 실제로 필요할 때 page를 메모리에 올리는 것.
+-> I/O 양의 감소, Memory 사용량 감소, 빠른 응답시간, 더 많은 사용자 수용
+-> Valid / Invalid bit 사용 : 
+-  Invalid의 의미 - 사용되지 않는 주소 영역인 경우, 
+- Page fault 발생 가능
+- Free frame이 없는 경우 : Page replacement: 강제로 뺏어옴, 
+Replacement Algorithm : 최소화시키는 것이 목표(
+FIFO 알고리즘 : 가장 오래된 것을 지움
+LRU 알고리즘 : 가장 오래전에 참조된 것 지움 linkedlist 사용 O(1) 
+LFU  알고리즘 : 가장 적게 참조된 것을 지움 Heap 사용 O(log n))
